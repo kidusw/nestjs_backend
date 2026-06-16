@@ -1,98 +1,141 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS Concepts — Full-Featured REST API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A NestJS project demonstrating core concepts and best practices: JWT auth, role-based access control, CRUD with pagination, file uploads to Cloudinary, and TypeORM with PostgreSQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- **Authentication** — register, login, JWT access/refresh tokens, rate-limited login
+- **Role-based access control** — `USER` and `ADMIN` roles with custom guards and decorators
+- **Posts** — full CRUD with pagination and author association
+- **File uploads** — upload, list, and delete files stored on Cloudinary
+- **User management** — fetch user profiles
+- **Global validation** — class-validator DTOs with whitelist and type transformation
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack
 
-## Project setup
+- NestJS + TypeScript
+- TypeORM + PostgreSQL
+- Passport + JWT (`@nestjs/jwt`, `passport-jwt`)
+- Cloudinary (file storage)
+- Multer (multipart uploads)
+- Bcrypt (password hashing)
+- Throttler (rate limiting)
+- Cache Manager
 
+## Prerequisites
+
+- Node.js 18+
+- PostgreSQL running on `localhost:5432`
+- A [Cloudinary](https://cloudinary.com) account
+
+## Setup
+
+**1. Install dependencies**
 ```bash
-$ npm install
+npm install
 ```
 
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+**2. Create the PostgreSQL database**
+```sql
+CREATE DATABASE "nestjs-full-project";
 ```
 
-## Run tests
+Default connection: `postgres:Bloodsport19@localhost:5432/nestjs-full-project`. Change it in [src/app.module.ts](src/app.module.ts) if needed.
 
-```bash
-# unit tests
-$ npm run test
+**3. Configure environment variables**
 
-# e2e tests
-$ npm run test:e2e
+Create a `.env` file in the project root:
+```env
+APP_NAME=nestapp
 
-# test coverage
-$ npm run test:cov
+# Cloudinary credentials (from cloudinary.com > Dashboard)
+cloud_name=your_cloud_name
+api_key=your_api_key
+api_secret=your_api_secret
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Running the App
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Development (watch mode — restarts on file changes)
+npm run start:dev
+
+# Standard development
+npm run start
+
+# Production
+npm run build
+npm run start:prod
+
+# Debug mode
+npm run start:debug
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+The server starts on **http://localhost:3000** by default. Set a `PORT` env var to override.
 
-## Resources
+TypeORM is configured with `synchronize: true`, so the database schema is created automatically on first run.
 
-Check out a few resources that may come in handy when working with NestJS:
+## API Overview
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Auth
+| Method | Route | Access | Description |
+|--------|-------|--------|-------------|
+| POST | `/auth/register` | Public | Register a new user |
+| POST | `/auth/login` | Public | Login and receive JWT tokens |
+| POST | `/auth/refresh` | Public | Refresh access token |
+| GET | `/auth/profile` | JWT | Get current user profile |
+| POST | `/auth/create-admin` | Admin | Create an admin user |
 
-## Support
+### Posts
+| Method | Route | Access | Description |
+|--------|-------|--------|-------------|
+| GET | `/posts` | Public | List posts (paginated) |
+| GET | `/posts/:id` | Public | Get a post by ID |
+| POST | `/posts` | JWT | Create a post |
+| PUT | `/posts/:id` | JWT | Update a post |
+| DELETE | `/posts/:id` | Admin | Delete a post |
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+Query params for listing: `page`, `limit`.
 
-## Stay in touch
+### File Upload
+| Method | Route | Access | Description |
+|--------|-------|--------|-------------|
+| POST | `/file-upload` | JWT | Upload a file (multipart) |
+| GET | `/file-upload` | JWT | List all uploaded files |
+| DELETE | `/file-upload/:id` | Admin | Delete a file |
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Users
+| Method | Route | Access | Description |
+|--------|-------|--------|-------------|
+| GET | `/user/:id` | JWT | Get a user by ID |
 
-## License
+## Testing
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```bash
+npm run test          # Unit tests
+npm run test:watch    # Unit tests in watch mode
+npm run test:cov      # Unit tests with coverage report
+npm run test:e2e      # End-to-end tests
+npm run test:debug    # Debug mode
+```
+
+## Linting & Formatting
+
+```bash
+npm run lint      # ESLint (auto-fix)
+npm run format    # Prettier
+```
+
+## Project Structure
+
+```
+src/
+├── auth/           # JWT auth, guards, strategies, decorators
+├── posts/          # Posts CRUD, pagination, existence pipe
+├── file-upload/    # Cloudinary file upload/delete
+├── user/           # User lookup
+├── common/         # Shared DTOs and interfaces (pagination)
+├── config/         # App configuration
+├── app.module.ts   # Root module + TypeORM config
+└── main.ts         # Bootstrap
+```
